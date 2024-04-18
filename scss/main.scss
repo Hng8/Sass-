@@ -1,0 +1,20 @@
+@import './resets';
+@import './variables';
+
+body {
+    background: $primary-color; // using the variable for value
+    color: $text-color;
+}
+
+.main {
+    width: 80%;
+    margin: 0 auto;
+
+    #{&}_paragraph { // if we just use &_paragraph it will be just .main.pargraph without knowing the parent
+        font-weight: map-get($font-weights, bold);
+
+        &:hover {
+            color: $accent-color;
+        }
+    }
+}
