@@ -1,20 +1,65 @@
 @import './resets';
 @import './variables';
 
+@function weight($weight-name) {
+    @return map-get($font-weights, $weight-name);
+}
+
+// mixin is similar to functions 
+@mixin flexCenter($direction) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+}
+// We can use mixin with booleans
+@mixin theme($light-theme: true) {
+    @if $light-theme {
+        background: lighten($primary-color, 100%);
+        color: darken($text-color, 100%);
+    }
+}
+
+@mixin mobile{
+    @media (max-width: $mobile) {
+        @content; // the @content is acting like a placeholder for the css styling that will be used when including the mixin
+    }
+}
+
 body {
     background: $primary-color; // using the variable for value
     color: $text-color;
 }
 
 .main {
-    width: 80%;
+    @include flexCenter(row);
+    width: 80% - 30%; // In sass no need for typing calc and it should be the same symbols, % % or px px
     margin: 0 auto;
 
-    #{&}_paragraph { // if we just use &_paragraph it will be just .main.pargraph without knowing the parent
-        font-weight: map-get($font-weights, bold);
+    #{&}_paragraph1 { // if we just use &_paragraph it will be just .main.pargraph without knowing the parent
+        // font-weight: map-get($font-weights, bold); // Instead of using map and call use key value we can use functions
+        font-weight: weight(regular); // calling the name of the function and using the value
 
         &:hover {
             color: $accent-color;
         }
     }
+
+    #{&}_paragraph2 {
+        @extend .main_paragraph1; // Getting the stylings that the paragraph1 has with adding few thins
+
+        &:hover {
+            color: royalblue;
+        }
+
+    }
+
+    @include mobile {
+        flex-direction: column;
+    }
+}
+
+// This class is set on the body, when true it will have light mode, and if false it will go back to dark mode
+.light {
+    @include theme($light-theme: false);
 }
